@@ -919,6 +919,10 @@ class PlacementCost(object):
         self.grid_height = float(self.height/self.grid_row)
         row = math.floor(y_pos / self.grid_height)
         col = math.floor(x_pos / self.grid_width)
+        # Clamp to legal range [0, grid_*-1] — floor() returns grid_*
+        # at the canvas extent, one past the last valid routing index.
+        row = max(0, min(row, self.grid_row - 1))
+        col = max(0, min(col, self.grid_col - 1))
         return row, col
 
     def __get_grid_location_position(self, col:int, row:int):
